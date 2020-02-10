@@ -1,0 +1,43 @@
+<div class="footer">
+    <nav id="page-footer">
+        <div id="bottom-nav">
+            <a href="./index.php">Home</a>
+            <button id="drop_button" onclick="toggleDropdown(this);"><img id="down_arrow_hoverA"
+                                                                          src="./img/down-arrow-hover.png"
+                                                                          alt="\/"><img
+                    id="down_arrowA" src="./img/down-arrow.png" alt="\/">Menu
+            </button>
+            <div id="dropdown">
+                <a href="./menu.php?doughnuts">Doughnuts</a>
+                <a href="./menu.php?coffee">Coffee</a>
+            </div>
+            <a href="./locations.php">Locations</a>
+            <a href="./about-us.php">About us</a>
+            <a href="./contact-us.php">Contact us</a>
+        </div>
+        <p>
+            <small>Creamy Doughnuts Copyright &copy; 2018</small>
+        </p>
+        <div id="footer_social_icons">
+            <h2>Connect With Us</h2>
+            <button id="fb_icon" class="social_icons"><a href="https://www.facebook.com/" target="_blank"><img
+                    src="./img/icon-facebook-big.png"></a></button>
+            <button id="gp_icon" class="social_icons"><a href="https://plus.google.com" target="_blank"><img
+                    src="./img/icon-googleplus-big.png"></a></button>
+            <button id="tw_icon" class="social_icons"><a href="https://twitter.com/" target="_blank"><img
+                    src="./img/icon-twitter-big.png"></a></button>
+        </div>
+    </nav>
+</div>
+<script>
+    /* Toggle between hiding and showing its dropdown content */
+    function toggleDropdown(element) {
+        element.classList.toggle("active");
+        let dropdownContent = element.nextElementSibling;
+        if (dropdownContent.style.display === "block") {
+            dropdownContent.style.display = "none";
+        } else {
+            dropdownContent.style.display = "block";
+        }
+    }
+</script>

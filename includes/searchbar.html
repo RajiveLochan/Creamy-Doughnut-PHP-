@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Montserrat|Josefin+Sans|Raleway" rel="stylesheet">
+    <script src="http://use.edgefonts.net/righteous:n4:all.js"></script>
+    <script type="text/javascript" src="scripts/script.js"></script>
+    <meta charset="UTF-8">
+    <title>SearchBar</title>
+    <style>
+        #searchBarMain {
+            position: relative;
+            top: 10px;
+            left: 50%;
+            margin-left: -250px;
+            width: 500px;
+            height: 30px;
+            float: left;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #d94e67;
+        }
+
+        #searchBarMain:after {
+            clear: both;
+        }
+
+        .searchBarElements {
+            display: inline-block;
+        }
+
+        #searchByCategoryMain {
+            width: 100px;
+            height: 100%;
+            float: left;
+        }
+
+        #searchCategoryComboDiv {
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            background-color: #ffffff;
+            border-radius: 0;
+            border: 0 solid #d94e67;
+        }
+
+        #searchCategoryComboDiv.hovered {
+            background-color: #f4f4f4;
+        }
+
+        #searchCategoryComboDiv:hover {
+            background-color: #f4f4f4;
+        }
+
+        #searchCategoryComboSpan {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 100%;
+            font-family: sans-serif;
+            font-size: 12px;
+            padding-left: 10px;
+            line-height: 30px;
+            letter-spacing: normal;
+        }
+
+        #searchCategoryComboHidden {
+            position: absolute;
+            height: 100%;
+            width: 100px;
+            top: 0;
+            opacity: 0;
+            border-radius: 0;
+            cursor: pointer;
+        }
+
+        #searchFieldMain {
+            position: absolute;
+            width: 350px;
+            height: 100%;
+            float: none;
+        }
+
+        #searchInputMain {
+            border-style: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        #searchButtonMain {
+            width: 50px;
+            height: 100%;
+            float: right;
+        }
+
+        #searchButton {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+            border-style: none;
+            color: rgba(0, 0, 0, 0.7);
+            cursor: pointer;
+            background: linear-gradient(to bottom, #d94e67, #ffffff);
+            transition: all 300ms ease;
+        }
+
+        #searchButton:hover {
+            color: rgba(0, 0, 0, 1);
+            background-size: 100% 200%;
+        }
+
+        .combo_icon {
+            color: #000000;
+            display: inline-block;
+            position: relative;
+            float: right;
+            right: 5px;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+        }
+
+        .combo_icon:after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-top: solid 1px currentColor;
+            border-right: solid 1px currentColor;
+            -webkit-transform: rotate(135deg);
+            transform: rotate(135deg);
+        }
+
+        #searchBarSuggestions {
+            display: block;
+            position: absolute;
+            width: 350px;
+            height: auto;
+            left: 50%;
+            top: 52px;
+            margin-left: -150px;
+            min-height: 30px;
+            z-index: 10;
+            padding: 0;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #cbcfe2 #c8cee7 #c4c7d7;
+            border-radius: 3px;
+            background-color: #fdfdfd;
+            background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fdfdfd), color-stop(100%, #eceef4));
+            background-image: -webkit-linear-gradient(top, #fdfdfd, #eceef4);
+            background-image: -moz-linear-gradient(top, #fdfdfd, #eceef4);
+            background-image: -ms-linear-gradient(top, #fdfdfd, #eceef4);
+            background-image: -o-linear-gradient(top, #fdfdfd, #eceef4);
+            background-image: linear-gradient(top, #fdfdfd, #eceef4);
+            -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            -ms-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            -o-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        #searchBarSuggestions.hidden {
+            display: none;
+            position: absolute;
+            height: 0;
+            width: 0;
+            visibility: hidden;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+
+        #searchBarSuggestions li {
+            cursor: pointer;
+            display: block
+        }
+
+        #searchBarSuggestions li:first-child {
+            margin-top: -1px
+        }
+
+        #searchBarSuggestions li:first-child:before, #searchBarSuggestions li:first-child:after {
+            display: block;
+            content: '';
+            width: 0;
+            height: 0;
+            position: absolute;
+            left: 50%;
+            margin-left: -5px;
+            border: 5px outset transparent;
+        }
+
+        #searchBarSuggestions li:first-child:before {
+            border-bottom: 5px solid #c4c7d7;
+            top: -11px;
+        }
+
+        #searchBarSuggestions li:first-child:after {
+            border-bottom: 5px solid #fdfdfd;
+            top: -10px;
+        }
+
+        #searchBarSuggestions li:first-child:hover:before, #searchBarSuggestions li:first-child:hover:after {
+            display: none
+        }
+
+        #searchBarSuggestions li:last-child {
+            margin-bottom: -1px
+        }
+
+        #searchBarSuggestions a {
+            display: block;
+            position: relative;
+            margin: 0 -1px;
+            padding: 6px 40px 6px 10px;
+            text-decoration: none;
+            color: #808394;
+            font-size: 14px;
+            font-weight: 500;
+            text-shadow: 0 1px #fff;
+            border: 1px solid transparent;
+            border-radius: 3px;
+        }
+
+        #searchBarSuggestions a span {
+            font-size: 10px;
+            font-weight: 200;
+        }
+
+        #searchBarSuggestions a:before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            margin-top: -9px;
+            background: url("img/arr-point.png") 0 0 no-repeat;
+        }
+
+        #searchBarSuggestions a:hover {
+            text-decoration: none;
+            color: #fff;
+            text-shadow: 0 -1px rgba(0, 0, 0, 0.3);
+            border-color: #2380dd #2179d5 #1a60aa;
+            background-color: #338cdf;
+            background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #59aaf4), color-stop(100%, #338cdf));
+            background-image: -webkit-linear-gradient(top, #59aaf4, #338cdf);
+            background-image: -moz-linear-gradient(top, #59aaf4, #338cdf);
+            background-image: -ms-linear-gradient(top, #59aaf4, #338cdf);
+            background-image: -o-linear-gradient(top, #59aaf4, #338cdf);
+            background-image: linear-gradient(top, #59aaf4, #338cdf);
+            -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px rgba(0, 0, 0, 0.08);
+            -moz-box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px rgba(0, 0, 0, 0.08);
+            -ms-box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px rgba(0, 0, 0, 0.08);
+            -o-box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px rgba(0, 0, 0, 0.08);
+            box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px rgba(0, 0, 0, 0.08);
+        }
+
+        #searchResultsDiv {
+            position: relative;
+            top: 50px;
+            width: 500px;
+            height: 300px;
+            margin: 0 auto;
+            display: block;
+            border: 1px solid #d94e67;
+            border-radius: 5px;
+        }
+
+        #searchResultsDiv .result-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        #searchResultsDiv .result-container img {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            object-fit: contain;
+            -o-object-fit: contain;
+            overflow: hidden;
+            float: right;
+            right: 5px;
+        }
+
+        #searchResultsDiv .result-container .result-title {
+            position: relative;
+            width: 200px;
+            height: auto;
+            min-height: 30px;
+            top: 2px;
+            float: left;
+            left: 5px;
+            text-align: left;
+            line-height: normal;
+        }
+
+        #searchResultsDiv .result-container .result-title h2 {
+            font-family: 'Josefin Sans', sans-serif;
+            color: #d94e67;
+            font-size: 18px;
+            opacity: 1;
+            transition: all ease-in 200ms;
+        }
+
+        #searchResultsDiv .result-container .result-description {
+            position: relative;
+            width: 200px;
+            height: auto;
+            float: left;
+            top: 2px;
+            left: 5px;
+            text-align: left;
+            line-height: normal;
+        }
+
+        #searchResultsDiv .result-container .result-description p {
+            font-family: 'Raleway', sans-serif;
+            font-size: 12px;
+            transition: all ease-in 200ms;
+        }
+
+        #searchResultsDiv .result-container .result-cart-button-div {
+            position: absolute;
+            bottom: 0;
+            margin: 0 auto;
+            width: 100%;
+            height: 40px;
+            transition: all ease-in 200ms;
+        }
+
+        #searchResultsDiv .result-container .result-cart-button {
+            position: relative;
+            display: block;
+            width: 100%;
+            margin: 0 auto;
+            height: 100%;
+            cursor: pointer;
+            background-color: #d94e67;
+            border: none;
+            opacity: 1;
+            font-size: 15px;
+            color: #ffffff;
+        }
+
+        #searchResultsDiv .result-container .result-cart-button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+<div id="searchBarMain">
+    <div id="searchByCategoryMain" class="searchBarElements">
+        <div id="searchCategoryComboDiv" class="combo_div">
+            <span id="searchCategoryComboSpan" class="combo_boxes">Books</span>
+            <i class="combo_icon"></i>
+        </div>
+        <select id="searchCategoryComboHidden" name="searchCategoryComboHidden" class="combo_boxes_hidden"
+                title="combo">
+            <option value="">All</option>
+        </select>
+    </div>
+    <div id="searchButtonMain" class="searchBarElements">
+        <button id="searchButton">
+            <svg width="15px" height="15px">
+                <path d="M11.618 9.897l4.224 4.212c.092.09.1.23.02.312l-1.464 1.46c-.08.08-.222.072-.314-.02L9.868 11.66M6.486 10.9c-2.42 0-4.38-1.955-4.38-4.367 0-2.413 1.96-4.37 4.38-4.37s4.38 1.957 4.38 4.37c0 2.412-1.96 4.368-4.38 4.368m0-10.834C2.904.066 0 2.96 0 6.533 0 10.105 2.904 13 6.486 13s6.487-2.895 6.487-6.467c0-3.572-2.905-6.467-6.487-6.467 "></path>
+            </svg>
+        </button>
+    </div>
+    <div id="searchFieldMain" class="searchBarElements">
+        <input id="searchInputMain" type="search" placeholder="Search for Products, Brands and more" name="searchInput"
+               onkeyup="getSuggestions(event, this)" onkeydown="return FilterTitle(event);"
+               onfocus="showSuggestions(event, this)" onfocusout="hideSuggestions(true);">
+    </div>
+</div>
+<ul id="searchBarSuggestions" class="searchBarSuggestions hidden"></ul>
+<div id="searchResultsDiv">
+
+</div>
+<script>
+    let combo = document.getElementById('searchCategoryComboHidden');
+    combo.onmouseover = function () {
+        document.getElementById('searchCategoryComboDiv').classList.add('hovered');
+    };
+    combo.onmouseout = function () {
+        document.getElementById('searchCategoryComboDiv').classList.remove('hovered');
+    };
+
+    /*
+    //make the width of the search input to stretch between the search button and category combo
+    function fieldAdjust() {
+        let a = document.getElementById('searchBarMain');
+        let x = document.getElementById('searchButtonMain');
+        let y = document.getElementById('searchByCategoryMain');
+        let b = x.offsetWidth;
+        let c = y.offsetWidth;
+        //document.getElementById('searchFieldMain').style.width = (a - b - c);
+        //$('#searchFieldMain').outerWidth($('#searchBarMain').width()-$('#searchButtonMain').outerWidth()-$('#searchByCategoryMain').outerWidth());
+        console.log('a:' + a);
+    }
+    */
+
+    //let combo = document.getElementById('searchByCategoryMain');
+    let span = document.getElementById('searchCategoryComboSpan');
+    let select = document.getElementById('searchCategoryComboHidden');
+
+    addEventHandler(select, 'change', function () {
+        //let comboFontSize = parseFloat(window.getComputedStyle(select, null).fontSize);
+        //let comboValue = this.value;
+        /*
+        if (comboValue !== '') {
+            let comboWidth = comboValue.length * comboFontSize;
+            combo.style.width = comboWidth.toString();
+            select.style.width = comboWidth.toString();
+        } else {
+            combo.style.width = '80px';
+            select.style.width = '80px';
+        }
+        */
+        span.innerHTML = select.options[select.selectedIndex].text;
+        //fieldAdjust();
+    });
+
+    function addEventHandler(obj, evt, handler) {
+        if (obj.addEventListener) {
+            // W3C method
+            obj.addEventListener(evt, handler, false);
+        } else if (obj.attachEvent) {
+            // IE method.
+            obj.attachEvent('on' + evt, handler);
+        } else {
+            // Old school method.
+            obj['on' + evt] = handler;
+        }
+    }
+
+    span.innerHTML = select.options[select.selectedIndex].text;
+    loadProductType();
+
+    function loadProductType() {
+        let url = "includes/products.php?types=";
+        ajaxFormGet(url, function () {
+            if (this.readyState === 4 && this.status === 200) {
+                fillCombo(this.responseText);
+            } else {
+                console.log(this.status + ":" + this.readyState);
+            }
+        });
+    }
+
+    function fillCombo(values) {
+        let comboBox = document.getElementById('searchCategoryComboHidden');
+        let arr = values.split('-');
+        for (let i = 0; i < arr.length - 1; i++) {
+            comboBox.innerHTML += "<option value='" + arr[i] + "'>" + arr[i] + "</option>";
+        }
+    }
+
+    /**
+     * @return {boolean}
+     */
+    function FilterTitle(event) {
+        let keyCode = ('which' in event) ? event.which : event.keyCode;
+        let isNumeric = (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105);
+        let modifiers = (event.altKey || event.ctrlKey || event.shiftKey || keyCode === 8 || (keyCode >= 37 && keyCode <= 40));
+        return !isNumeric || modifiers;
+    }
+
+    function getSuggestions(event, element) {
+        let keyCode = ('which' in event) ? event.which : event.keyCode;
+        let isNumeric = (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105);
+        let modifiers = (event.altKey || event.ctrlKey || event.shiftKey || (keyCode >= 16 && keyCode <= 18) || (keyCode >= 37 && keyCode <= 40));
+        if (isNumeric || modifiers) {
+            return false;
+        } else {
+            let val = element.value;
+            if (val.length > 1) {
+                searchSuggestion(val);
+            } else {
+                hideSuggestions();
+            }
+        }
+    }
+
+    function searchSuggestion(value) {
+        let select = document.getElementById('searchCategoryComboHidden');
+        let category = select.options[select.selectedIndex].text;
+        category = (category === '') ? "All" : category; //if category value is empty, then that means get from all
+        let url = "includes/products.php?suggest=" + value + "&category=" + category;
+        ajaxFormGet(url, function () {
+            if (this.readyState === 4 && this.status === 200) {
+                //fillCombo(this.responseText);
+                loadSuggestions(this.responseText);
+            } else {
+                console.log(this.status + ":" + this.readyState);
+            }
+        });
+    }
+
+    function loadProduct(productID) {
+        //console.log(productID);
+        //alert(productID);
+        let url = "includes/products.php?productID="+productID;
+        ajaxFormGet(url, function () {
+            if (this.readyState === 4 && this.status === 200) {
+                //fillCombo(this.responseText);
+                showProduct(this.responseText);
+            } else {
+                console.log(this.status + ":" + this.readyState);
+            }
+        });
+    }
+
+    function showProduct(result) {
+        let resultsDiv = document.getElementById('searchResultsDiv');
+        if(resultsDiv.hasChildNodes()) {//remove the innerDiv if it already exist
+            resultsDiv.removeChild(resultsDiv.firstChild);
+        }
+        if (result !== '-1') {
+            let file = JSON.parse(result);
+            if (file.length > 0) {
+                let innerDiv = document.createElement('div');
+                innerDiv.className = 'result-container';
+                let image = document.createElement('img');
+                image.src = file[0]['ProductImage'];
+                innerDiv.appendChild(image);
+                let itemTitle = document.createElement('div');
+                itemTitle.className = 'result-title';
+                itemTitle.innerHTML = "<h2>" + file[0]['ProductTitle'] + "</h2>";
+                innerDiv.appendChild(itemTitle);
+                let itemDescription = document.createElement('div');
+                itemDescription.className = 'result-description';
+                itemDescription.innerHTML = "<p><span>" + file[0]['ProductDescription'] + "</span></p>";
+                innerDiv.appendChild(itemDescription);
+                let cartButton = document.createElement('div');
+                let prID = file[0]['ProductID'];
+                cartButton.className = 'result-cart-button-div';
+                cartButton.innerHTML = "<button class='result-cart-button' type='button'>Add to cart</button>";
+                cartButton.onclick = function () {
+                    getProduct(prID);
+                };
+                innerDiv.appendChild(cartButton);
+                resultsDiv.appendChild(innerDiv);
+            }
+        }
+    }
+
+    function loadSuggestions(result) {
+        let list = document.getElementById('searchBarSuggestions');
+        if (result !== '-1') {
+            let file = JSON.parse(result);
+            if (file.length > 0) {
+                list.classList.remove('hidden');
+                list.innerHTML = '';
+                let totalResults = file.length > 5 ? 5 : file.length;
+                for (let i = 0; i < totalResults; i++) {
+                    let anchor = document.createElement('a');
+                    let id = file[i]["ProductID"];
+                    anchor.id = 'a' + i;
+                    anchor.href = 'javascript:void(0);';
+                    anchor.innerHTML = generateStringOutput(file[i]["ProductTitle"], 30) + "<br><span>" + generateStringOutput(file[i]["ProductDescription"], 70) + "</span>";
+                    anchor.onclick = function (e) {
+                        e.preventDefault();
+                        loadProduct(id);
+                    };
+                    let row = document.createElement('li');
+                    row.appendChild(anchor);
+                    list.appendChild(row);
+                    /*let id = file[i]["ProductID"];
+                    list.innerHTML += "<li><a id='" + 'a' + i + "' onclick='showProduct(" + id + ");'>" + generateStringOutput(file[i]["ProductTitle"], 30) + "<br><span>" + generateStringOutput(file[i]["ProductDescription"], 70) + "</span></a></li>";
+                    document.getElementById('a' + i).onclick = function () {
+                        this.preventDefault();
+                        console.log("ababab");
+                        showProduct(file[i]["ProductID"]);
+                    };*/
+                }
+            } else {
+                list.classList.add('hidden');
+            }
+        } else {
+            list.innerHTML = '';
+        }
+    }
+
+    function generateStringOutput(value, length) {
+        value = value.replace(/[®™]/gi, '');
+        return value.length > length ? value.substr(0, length) + '....' : value;
+    }
+
+    function showSuggestions(e, element) {
+        let val = element.value;
+        if (val.length > 0) {
+            searchSuggestion(val);
+        } else {
+            hideSuggestions();
+        }
+    }
+
+    function hideSuggestions(timeout = false) {
+        if(timeout) {
+            setTimeout(function () {
+                document.getElementById('searchBarSuggestions').classList.add('hidden');
+            }, 150);
+        } else {
+            document.getElementById('searchBarSuggestions').classList.add('hidden');
+        }
+    }
+
+    /*window.onclick = function (event) {
+        let suggestions = document.getElementById('searchBarSuggestions');
+        let input = document.getElementById('searchInputMain');
+        if (event.target !== suggestions || event.target !== input) {
+            suggestions.classList.add("hidden");
+        } else {
+            suggestions.classList.remove("hidden");
+        }
+    };*/
+
+    document.getElementById('searchInputMain').onfocusout = function () {
+        hideSuggestions();
+    };
+</script>
+</body>
+</html>

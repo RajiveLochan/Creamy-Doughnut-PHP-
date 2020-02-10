@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Mina|Work+Sans|Montserrat');
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        #signInStrip {
+            color: #ffffff;
+            background-color: #d94e67;
+            width: 100%;
+            height: 20px;
+        }
+
+        #signInSpan {
+            float: none;
+            padding: 0 5px;
+        }
+
+        #signInSpan a {
+            display: inline;
+            color: #ffffff;
+        }
+
+        #signInSpan a:hover {
+            color: #d94e67;
+            background-color: #ffffff;
+        }
+
+        .modal .loginInputs {
+            position: relative;
+            width: 80%;
+            height: 10px;
+            padding: 12px 5px;
+            margin: 0 10% 10px 10%;
+            display: block;
+            border: 1px solid #cccccc;
+        }
+
+        .modal .loginInputs:focus {
+            border-color: #d94e67;
+        }
+
+        .inputLabels {
+            position: relative;
+            margin: 0 auto 0 10%;
+            display: inline;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 12px;
+        }
+
+        .inputLabels strong {
+            color: #ff0000;
+        }
+
+        .inputLabels strong::before {
+            content: ' ';
+        }
+
+        .inputLabels strong::after {
+            content: ' ';
+        }
+
+        .errorReporter {
+            position: relative;
+            padding-left: 5px;
+            padding-right: 2px;
+            bottom: 5px;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 8px;
+            color: #ff0000;
+        }
+
+        .submitButton,
+        .cancelbtn {
+            position: relative;
+            display: block;
+            background-color: #d94e67;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px auto;
+            border: none;
+            cursor: pointer;
+            width: 40%;
+            height: 35px;
+            line-height: 7px;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 16px;
+        }
+
+        .submitButton:hover,
+        .cancelbtn:hover {
+            opacity: 0.8;
+        }
+
+        .cancelbtn {
+            margin: 0;
+            width: auto;
+            height: 35px;
+            float: left;
+            padding: 10px 18px;
+            background-color: #f44336;
+        }
+
+        .container {
+            padding: 0;
+            clear: both;
+        }
+
+        .container.bottom {
+            background-color: #f1f1f1;
+            min-height: 35px;
+            padding: 5px;
+        }
+
+        span.forgetPass {
+            position: relative;
+            top: 8px;
+            float: right;
+            width: 120px;
+        }
+
+        span.forgetPass a {
+            color: #d94e67;
+        }
+
+        span.forgetPass a:hover {
+            opacity: 0.8;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .dialog {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            border: 1px solid #888;
+            width: 40%;
+        }
+
+        .loginForm {
+            margin: 0 auto;
+            width: 100%;
+            height: auto;
+        }
+
+        .close {
+            position: relative;
+            right: 5px;
+            float: right;
+            top: 0;
+            color: #000;
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: red;
+            cursor: pointer;
+        }
+
+        .animate {
+            -webkit-animation: animateSlideIn 1s;
+            animation: animateSlideIn 1s;
+        }
+
+        @-webkit-keyframes animateSlideIn {
+            from {
+                -webkit-transform: translate(0px, -1000px)
+            }
+            to {
+                -webkit-transform: translate(0px, 0px)
+            }
+        }
+
+        @keyframes animateSlideIn {
+            from {
+                transform: translate(0px, -1000px)
+            }
+            to {
+                transform: translate(0px, 0px)
+            }
+        }
+
+        @-webkit-keyframes animateSlideOut {
+            from {
+                -webkit-transform: translate(0px, 0px)
+            }
+            to {
+                -webkit-transform: translate(0px, -1000px)
+            }
+        }
+
+        @keyframes animateSlideOut {
+            from {
+                transform: translate(0px, 0px)
+            }
+            to {
+                transform: translate(0px, -1000px)
+            }
+        }
+
+        #signIn_error_reporter {
+            width: 80%;
+            height: auto;
+            margin: 0 10%;
+            padding: 2px;
+        }
+
+        #signIn_error_reporter #signIn_error {
+            position: relative;
+            padding: 0;
+            bottom: 0;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        #signUp_error_reporter {
+            width: 80%;
+            height: auto;
+            margin: 0 10%;
+            padding: 2px;
+        }
+
+        #signUp_error_reporter #signUp_error {
+            position: relative;
+            padding: 0;
+            bottom: 0;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        #checkDiv {
+            position: relative;
+            display: block;
+            margin: 0 35%;
+            min-width: 140px;
+            width: 30%;
+            height: auto;
+            font-family: 'Montserrat', 'verdana', sans-serif;
+            font-size: 12px;
+        }
+
+        .checkContainer {
+            display: block;
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 12px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .checkContainer input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 15px;
+            width: 15px;
+            background-color: #eeeeee;
+        }
+
+        .checkContainer:hover input ~ .checkmark {
+            background-color: #cccccc;
+        }
+
+        .checkContainer input:checked ~ .checkmark {
+            background-color: #d94e67;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkContainer input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .checkContainer .checkmark:after {
+            left: 4px;
+            top: 1px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+
+        ::-webkit-input-placeholder {
+            padding-left: 5px;
+            font-family: 'Montserrat', 'verdana', sans-serif;
+            font-size: 10px;
+        }
+
+        ::-moz-placeholder {
+            padding-left: 5px;
+            font-family: 'Montserrat', 'verdana', sans-serif;
+            font-size: 10px;
+        }
+
+        ::placeholder {
+            padding-left: 5px;
+            font-family: 'Montserrat', 'verdana', sans-serif;
+            font-size: 10px;
+        }
+
+        @media screen and (max-width: 300px) {
+            .submitButton,
+            .cancelbtn {
+                padding: 2px 5px;
+                margin: 2px auto;
+                width: 100%;
+                height: 30px;
+                font-family: 'Work Sans', sans-serif;
+                font-size: 10px;
+            }
+
+            #checkDiv {
+                margin: 0 auto;
+            }
+
+            .container.bottom {
+                min-height: 100px;
+            }
+
+            span.forgetPass {
+                top: 100px;
+                float: none;
+            }
+
+            ::-webkit-input-placeholder {
+                padding-left: 1px;
+                font-size: 7px;
+            }
+
+            ::-moz-placeholder {
+                padding-left: 1px;
+                font-size: 7px;
+            }
+
+            ::placeholder {
+                padding-left: 1px;
+                font-size: 7px;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .loginInputs {
+                width: 100%;
+                margin: 0;
+            }
+
+            .inputLabels {
+                margin: 0 auto 0 10%;
+                font-size: 10px;
+            }
+
+            .dialog {
+                margin: 5% auto 15% auto;
+                width: 80%;
+            }
+
+            .container {
+                padding: 2px;
+            }
+
+            .container.bottom {
+                min-height: 40px;
+            }
+
+            span.forgetPass {
+                display: block;
+                float: right;
+                top: 10px;
+                margin: 0;
+            }
+        }
+
+        #bottom_toast {
+            position: fixed;
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #d94e67;
+            border: 2px solid #1ba3e1;
+            color: #fff;
+            text-align: center;
+            font-family: 'Montserrat', 'verdana', sans-serif;
+            font-size: 12px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            padding: 16px;
+            z-index: 10;
+            left: 50%;
+            bottom: 30px;
+        }
+
+        #bottom_toast.visible {
+            visibility: visible;
+            -webkit-animation: fadein 500ms, fadeout 500ms 2500ms;
+            -moz-animation: fadein 500ms, fadeout 500ms 2500ms;
+            -o-animation: fadein 500ms, fadeout 500ms 2500ms;
+            animation: fadein 500ms, fadeout 500ms 2500ms;
+        }
+
+        @-webkit-keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @-moz-keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @-o-keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+
+        @-moz-keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+
+        @-o-keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="signInStrip">
+	<span id="signInSpan">Welcome, <a id="anchorSignUp" href="#" onclick="signUpDialog();">Create an account</a> or <a
+            id="anchorSignIn" href="#"
+            onclick="signInDialog();">Sign in</a> to you account</span>
+</div>
+<div id="signUpDiv" class="modal">
+    <div class="dialog animate">
+        <form id="signUpForm" name="signUpForm" class="loginForm" method="post"
+              action="" onsubmit="userRegister(this.uEmail, this.uName, this.uPass, this.uConfirm); return false;"
+              enctype="application/x-www-form-urlencoded">
+            <span id="uClose" class="close" title="Close">&times;</span>
+            <div class="container">
+                <div id="signUp_error_reporter"><span id="signUp_error"
+                                                      class="errorReporter"></span></div>
+                <label class="inputLabels" for="uName">Username</label><span id="uName_error"
+                                                                             class="errorReporter"></span>
+                <input id="uName" name="uName" class="loginInputs" type="text" placeholder="Less than 50 characters"
+                       maxlength="50">
+                <label class="inputLabels" for="uEmail">Email<strong>*</strong></label><span id="uEmail_error"
+                                                                                             class="errorReporter"></span>
+                <input id="uEmail" name="uEmail" class="loginInputs" type="email" placeholder="someone@example.com"
+                       required>
+
+                <label class="inputLabels" for="uPass">Password<strong>*</strong></label><span id="uPass_error"
+                                                                                               class="errorReporter"></span>
+                <input id="uPass" name="uPass" class="loginInputs" type="password" placeholder="8-16 characters"
+                       required>
+
+                <label class="inputLabels" for="uConfirm">Confirm Password<strong>*</strong></label><span
+                    id="uConfirm_error" class="errorReporter"></span>
+                <input id="uConfirm" name="uConfirm" class="loginInputs" type="password"
+                       placeholder="Re-enter your password" required>
+
+                <button id="uSubmit" name="uSubmit" class="submitButton" type="submit" onclick="validationSignUp();"
+                        title="Create an account">Join
+                </button>
+            </div>
+            <div class="container bottom" style="background-color:#f1f1f1">
+                <button id="uCancel" type="button" class="cancelbtn">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="signInDiv" class="modal">
+    <div class="dialog animate">
+        <form id="signInForm" name="signInForm" class="loginForm" method="post"
+              action="" onsubmit="userLogin(this.iEmail, this.iPass, this.iRemember); return false;"
+              enctype="application/x-www-form-urlencoded">
+            <span id="iClose" class="close" title="Close">&times;</span>
+            <div class="container">
+                <div id="signIn_error_reporter"><span id="signIn_error"
+                                                      class="errorReporter"></span></div>
+                <label class="inputLabels" for="iEmail">Email</label><span id="iEmail_error"
+                                                                           class="errorReporter"></span>
+                <input id="iEmail" name="iEmail" class="loginInputs" type="email" placeholder="Enter you Email address"
+                       required>
+
+                <label class="inputLabels" for="iPass">Password</label><span id="iPass_error"
+                                                                             class="errorReporter"></span>
+                <input id="iPass" name="iPass" class="loginInputs" type="password" placeholder="Enter the password"
+                       required>
+
+                <button id="iSubmit" name="iSubmit" class="submitButton" type="submit" onclick="validationSignIn();"
+                        title="Login to your account">Login
+                </button>
+                <div id="checkDiv">
+                    <label class="checkContainer" for="iRemember"><input id="iRemember" type="checkbox"
+                                                                         checked="checked" name="iRemember"><span
+                            class="checkmark"></span>Keep me signed in</label>
+                </div>
+            </div>
+            <div class="container bottom">
+                <button id="iCancel" type="button" class="cancelbtn">Cancel</button>
+                <span class="forgetPass"><a id="iForget" href="#">Forgot password?</a></span>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="bottom_toast"></div>
+<script>
+    window.onload = function () {
+        if (checkForCookie("rememberMe") !== null) {
+            let url = "includes/signInStrip.php?cookie=exists";
+            ajaxFormGet(url, function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    let response = this.responseText;
+                    reLoginRequestResponse(response);
+                } else {
+                    console.log(this.status + ":" + this.readyState);
+                }
+            });
+        }
+    };
+
+    const signUpDiv = document.getElementById('signUpDiv');
+    const signInDiv = document.getElementById('signInDiv');
+
+    function signUpDialog() {
+        signUpDiv.style.display = "block";
+        document.getElementById('uClose').onclick = function () {
+            signUpDiv.style.display = "none";
+        };
+        document.getElementById('uCancel').onclick = function () {
+            signUpDiv.style.display = "none";
+        };
+    }
+
+    function signInDialog() {
+        signInDiv.style.display = "block";
+        document.getElementById('iClose').onclick = function () {
+            signInDiv.style.display = "none";
+        };
+        document.getElementById('iCancel').onclick = function () {
+            signInDiv.style.display = "none";
+        };
+    }
+
+    function validationSignUp() {
+        let uEmail = document.signUpForm.uEmail;
+        let uPass = document.signUpForm.uPass;
+        let uConfirm = document.signUpForm.uConfirm;
+        let uName = document.signUpForm.uName;
+
+        if (emptyField(uEmail, uPass, uConfirm)) {
+            if (checkAlphabetIfPresent(uName)) {
+                if (emailFormat(uEmail)) {
+                    if (inputLength(uPass)) {
+                        if (confirmPassword(uPass, uConfirm)) {
+                            resetProfileErrors();
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    function validationSignIn() {
+        let iEmail = document.signInForm.iEmail;
+        let iPass = document.signInForm.iPass;
+
+        if (emptyField2(iEmail, iPass)) {
+            if (emailFormat2(iEmail)) {
+                if (inputLength2(iPass)) {
+                    resetProfileErrors2();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    function emptyField(uEmail, uPass, uConfirm) {
+        let uEmail_len = trimInput(uEmail.value).length;
+        let uPass_len = trimInput(uPass.value).length;
+        let uConfirm_len = trimInput(uConfirm.value).length;
+
+        if (uEmail_len === 0 || uPass_len === 0 || uConfirm_len === 0) {
+            if (uEmail_len === 0) {
+                document.getElementById('uEmail_error').innerHTML = "The marked fields are required";
+                document.getElementById('uEmail').style.borderColor = "#ff0000";
+            } else {
+                document.getElementById('uEmail_error').innerHTML = "";
+                document.getElementById('uEmail').style.borderColor = "#cccccc";
+            }
+            if (uPass_len === 0) {
+                document.getElementById('uPass_error').innerHTML = "The marked fields are required";
+                document.getElementById('uPass').style.borderColor = "#ff0000";
+            } else {
+                document.getElementById('uPass_error').innerHTML = "";
+                document.getElementById('uPass').style.borderColor = "#cccccc";
+            }
+            if (uConfirm_len === 0) {
+                document.getElementById('uConfirm_error').innerHTML = "The marked fields are required";
+                document.getElementById('uConfirm').style.borderColor = "#ff0000";
+            } else {
+                document.getElementById('uConfirm_error').innerHTML = "";
+                document.getElementById('uConfirm').style.borderColor = "#cccccc";
+            }
+            return false;
+        } else {
+            resetProfileErrors();
+            return true;
+        }
+    }
+
+    function emptyField2(iEmail, iPass) {
+        let iEmail_len = trimInput(iEmail.value).length;
+        let iPass_len = trimInput(iPass.value).length;
+
+        if (iEmail_len === 0 || iPass_len === 0) {
+            if (iEmail_len === 0) {
+                document.getElementById('iEmail_error').innerHTML = "The marked fields are required";
+                document.getElementById('iEmail').style.borderColor = "#ff0000";
+            } else {
+                document.getElementById('iEmail_error').innerHTML = "";
+                document.getElementById('iEmail').style.borderColor = "#cccccc";
+            }
+            if (iPass_len === 0) {
+                document.getElementById('iPass_error').innerHTML = "The marked fields are required";
+                document.getElementById('iPass').style.borderColor = "#ff0000";
+            } else {
+                document.getElementById('iPass_error').innerHTML = "";
+                document.getElementById('iPass').style.borderColor = "#cccccc";
+            }
+            return false;
+        } else {
+            resetProfileErrors2();
+            return true;
+        }
+    }
+
+    function emailFormat(uEmail) {
+        let format = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (trimInput(uEmail.value).match(format)) {
+            document.getElementById('uEmail_error').innerHTML = "";
+            document.getElementById('uEmail').style.borderColor = "#cccccc";
+            return true;
+        } else {
+            document.getElementById('uEmail_error').innerHTML = "Enter a valid E-mail address";
+            document.getElementById('uEmail').style.borderColor = "#ff0000";
+            uEmail.focus();
+            return false;
+        }
+    }
+
+    function emailFormat2(iEmail) {
+        let format = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (trimInput(iEmail.value).match(format)) {
+            document.getElementById('iEmail_error').innerHTML = "";
+            document.getElementById('iEmail').style.borderColor = "#cccccc";
+            return true;
+        } else {
+            document.getElementById('iEmail_error').innerHTML = "Enter a valid E-mail address";
+            document.getElementById('iEmail').style.borderColor = "#ff0000";
+            iEmail.focus();
+            return false;
+        }
+    }
+
+    function inputLength(uPass) {
+        let uPass_len = trimInput(uPass.value).length;
+        if (uPass_len < 8 || uPass_len > 16) {
+            document.getElementById('uPass_error').innerHTML = "Between 8 to 16 characters";
+            document.getElementById('uPass').style.borderColor = "#ff0000";
+            uPass.focus();
+            return false;
+        } else {
+            document.getElementById('uPass_error').innerHTML = "";
+            document.getElementById('uPass').style.borderColor = "#cccccc";
+            return true;
+        }
+    }
+
+    function inputLength2(iPass) {
+        let iPass_len = trimInput(iPass.value).length;
+        if (iPass_len < 8 || iPass_len > 16) {
+            document.getElementById('iPass_error').innerHTML = "Between 8 to 16 characters";
+            document.getElementById('iPass').style.borderColor = "#ff0000";
+            iPass.focus();
+            return false;
+        } else {
+            document.getElementById('iPass_error').innerHTML = "";
+            document.getElementById('iPass').style.borderColor = "#cccccc";
+            return true;
+        }
+    }
+
+    function confirmPassword(uPass, uConfirm) {
+        if (trimInput(uPass.value) === trimInput(uConfirm.value)) {
+            document.getElementById('uConfirm_error').innerHTML = "";
+            document.getElementById('uConfirm').style.borderColor = "#cccccc";
+            return true;
+        } else {
+            document.getElementById('uConfirm_error').innerHTML = "The passwords do not match";
+            document.getElementById('uConfirm').style.borderColor = "#ff0000";
+            uConfirm.focus();
+            return false;
+        }
+    }
+
+    function checkAlphabetIfPresent(uName) {
+        let format = /^[A-Za-z]+$/;
+        if (trimInput(uName.value).length > 0) {
+            if (uName.value.match(format)) {
+                document.getElementById('uName_error').innerHTML = "";
+                document.getElementById('uName').style.borderColor = "#cccccc";
+                return true;
+            } else {
+                document.getElementById('uName_error').innerHTML = "Alphabetical characters only";
+                document.getElementById('uName').style.borderColor = "#ff0000";
+                uName.focus();
+                return false;
+            }
+        } else {
+            document.getElementById('uName_error').innerHTML = "";
+            document.getElementById('uName').style.borderColor = "#cccccc";
+            return true;
+        }
+    }
+
+    function resetProfileErrors() {
+        let errorTexts = ['uEmail_error', 'uName_error', 'uPass_error', 'uConfirm_error'];
+        let elementClasses = ['uEmail', 'uName', 'uPass', 'uConfirm'];
+        for (let i = 0; i < 4; i++) {
+            document.getElementById(errorTexts[i]).innerHTML = "";
+            document.getElementById(elementClasses[i]).style.borderColor = "#cccccc";
+        }
+    }
+
+    function resetProfileErrors2() {
+        let errorTexts = ['iEmail_error', 'iPass_error'];
+        let elementClasses = ['iEmail', 'iPass'];
+        for (let i = 0; i < 2; i++) {
+            document.getElementById(errorTexts[i]).innerHTML = "";
+            document.getElementById(elementClasses[i]).style.borderColor = "#cccccc";
+        }
+    }
+
+    function trimInput(value) {
+        return value.replace(/^\s+|\s+$/gm, '');
+    }
+
+    window.onclick = function (event) {
+        if (event.target === signInDiv) {
+            signInDiv.style.display = "none";
+        } else if (event.target === signUpDiv) {
+            signUpDiv.style.display = "none";
+        }
+    };
+
+
+    let ajaxRequest;  // The ajax request object
+    //Cross-Browser Support Code
+    function ajaxFunction() {
+        try {
+            // Opera 8.0+, Firefox, Safari
+            ajaxRequest = new XMLHttpRequest();
+        } catch (e) {
+            // Internet Explorer Browsers
+            try {
+                ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e) {
+                    // Something went wrong
+                    console.log('Browser not supported');
+                    return false;
+                }
+            }
+        }
+    }
+
+    function ajaxFormPost(data, url, callback) {
+        ajaxFunction(); //initializing the ajax object
+        ajaxRequest.onreadystatechange = callback;
+        ajaxRequest.open('POST', url, true);
+        ajaxRequest.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        ajaxRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        ajaxRequest.send(data);
+    }
+
+    function ajaxFormGet(url, callback) {
+        ajaxFunction(); //initializing the ajax object
+        ajaxRequest.onreadystatechange = callback;
+        ajaxRequest.open('GET', url, true);
+        ajaxRequest.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        ajaxRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        ajaxRequest.send(null);
+    }
+
+    function userLogin(userEmail, password, remember) {
+        let response;
+        let data = "iEmail=" + userEmail.value + "&iPass=" + password.value + "&iRemember=" + remember.checked;
+        ajaxFormPost(data, "includes/signInStrip.php", function () {
+            if (this.readyState === 4 && this.status === 200) {
+                response = this.responseText;
+                loginResponse(response);
+            } else {
+                console.log(this.status + ":" + this.readyState);
+            }
+        });
+    }
+
+    function userRegister(userEmail, userName, userPassword, userConfirm) {
+        let response;
+        let data = "uEmail=" + userEmail.value + "&uName=" + userName.value + "&uPass=" + userPassword.value + "&uConfirm=" + userConfirm.value;
+        ajaxFormPost(data, "includes/signInStrip.php", function () {
+            if (this.readyState === 4 && this.status === 200) {
+                response = this.responseText;
+                registerResponse(response);
+            } else {
+                console.log(this.status + ":" + this.readyState);
+            }
+        });
+    }
+
+    function loginResponse(responseCode) {
+        responseCode = parseInt(responseCode);
+        //code:
+        // 0: 'Login Success'
+        // 11: 'Login Success with remember'
+        // 1: 'Incorrect Password'
+        // 2: 'User not found'
+        //-1: 'Validation Error'
+        switch (responseCode) {
+            case 0:
+                document.getElementById('signIn_error').style.color = '#66ff64';
+                document.getElementById('signIn_error').innerText = 'Successfully Logged In';
+                loginSuccess();
+                break;
+            case 1:
+                document.getElementById('signIn_error').style.color = '#ff0000';
+                document.getElementById('signIn_error').innerText = 'Incorrect Password. Please try again.';
+                break;
+            case 2:
+                document.getElementById('signIn_error').style.color = '#ff0000';
+                document.getElementById('signIn_error').innerText = 'Could not locate your account. Please check your e-mail and login again.';
+                break;
+            case -1:
+                console.log('Validation Error');
+                validationSignIn();
+                break;
+            case 11:
+                document.getElementById('signIn_error').style.color = '#66ff64';
+                document.getElementById('signIn_error').innerText = 'Successfully Logged In, you will be kept signed in';
+                loginSuccess();
+                break;
+            case 101:
+                window.location = "./adminpage.php";
+                break
+            default:
+                console.log('Some unknown error, Error Code: ' + responseCode);
+                break;
+        }
+    }
+
+    function logoutUser(username) {
+        let url = "includes/session.php?username=" + username;
+        ajaxFormGet(url, function () {
+            if (this.readyState === 4 && this.status === 200) {
+                let response = this.responseText;
+                console.log(response);
+                if (response === '1') {
+                    showToast('Logged out successfully');
+                    afterLogout();
+                } else {
+                    console.log('unable to terminate session');
+                }
+            } else {
+                console.log(this.status + ":" + this.readyState);
+            }
+        });
+    }
+
+    function afterLogout() {
+        document.getElementById('signInSpan').style.cssFloat = 'none';
+        document.getElementById('signInSpan').innerHTML = "Welcome, <a id='anchorSignUp' href='#'>Create an account</a> or <a id='anchorSignIn' href='#'>Sign in</a> to you account";
+        document.getElementById('anchorSignUp').onclick = function () {
+            signUpDialog();
+        };
+        document.getElementById('anchorSignIn').onclick = function () {
+            signInDialog();
+        };
+    }
+
+    //checking if the session is created successfully
+    function loginSuccess() {
+        let response;
+        ajaxFormGet("includes/session.php", function () {
+            if (this.readyState === 4 && this.status === 200) {
+                response = this.responseText;
+                if (response !== '0') {
+                    showToast('Logged in as ' + response);
+                    document.getElementById('signInSpan').style.cssFloat = 'right';
+                    document.getElementById('signInSpan').innerHTML = "Logged in as " + response + ". <a id='logoutLink' href='#'>Logout</a>";
+                    document.getElementById('logoutLink').onclick = function () {
+                        logoutUser(response);
+                    };
+                    setTimeout(function () {
+                        signInDiv.style.display = "none";
+                    }, 1800);
+                } else {
+                    console.log("Error response: " + response);
+                }
+            } else {
+                console.log(this.status + ":" + this.readyState);
+            }
+        });
+    }
+
+    function registerResponse(responseCode) {
+        responseCode = parseInt(responseCode);
+        //code:
+        // 0: 'No rows affected'
+        // 1: '1 row affected'
+        // 4: 'User already exists'
+        //-1: 'Validation Error'
+        switch (responseCode) {
+            case 0:
+                document.getElementById('signUp_error').style.color = '#ff0000';
+                document.getElementById('signUp_error').innerText = 'Unable to connect to database. Please try again.';
+                break;
+            case 1:
+                document.getElementById('signUp_error').style.color = '#66ff64';
+                document.getElementById('signUp_error').innerText = 'Registered successfully';
+                break;
+            case 4:
+                document.getElementById('signUp_error').style.color = '#ff0000';
+                document.getElementById('signUp_error').innerText = 'Your account already exists. Please sign in access your account.';
+                break;
+            case -1:
+                console.log('Validation Error');
+                validationSignUp();
+                break;
+            default:
+                console.log('Some unknown error, Error Code: ' + responseCode);
+                break;
+        }
+    }
+
+    //shows a toast message
+    function showToast(message) {
+        let toast = document.getElementById("bottom_toast");
+        toast.innerText = message;
+        toast.className = "visible";
+        setTimeout(function () {
+            toast.className = toast.className.replace("visible", "");
+        }, 3000);
+    }
+
+    function reLoginRequestResponse(responseCode) {
+        responseCode = parseInt(responseCode);
+        //code:
+        // 0: 'Cookie was tampered, ignore re-login'
+        // 1: 'Token matches, re-login user'
+        //-1: 'Token does not match, re-login user'
+        //-2: 'Incorrect cookie sent'
+        switch (responseCode) {
+            case 0:
+
+                break;
+            case 1:
+                loginSuccess();
+                break;
+            case -1:
+
+                break;
+            case -2:
+                console.log('Validation Error');
+                validationSignIn();
+                break;
+            default:
+                console.log('Some unknown error, Error Code: ' + responseCode);
+                break;
+        }
+    }
+
+    //this will check for the cookie and return the value if it exists or return null
+    function checkForCookie(cookieName) {
+        let format = new RegExp("^(?:.*;)?\\s*" + cookieName + "\\s*=\\s*([^;]+)(?:.*)?$");
+        return (document.cookie.match(format) || [, null])[1];
+    }
+</script>
+</body>
+</html>
+
